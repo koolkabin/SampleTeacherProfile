@@ -1,0 +1,13 @@
+﻿@model CollegeWebsiteAdmin.Models.Subject
+
+<form asp-controller="Subjects" asp-action="SubjectCreate">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="SubjectName" class="control-label"></label>
+        <input asp-for="SubjectName" class="form-control" />
+        <span asp-validation-for="SubjectName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>

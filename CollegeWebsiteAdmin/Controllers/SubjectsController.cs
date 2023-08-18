@@ -158,5 +158,22 @@ namespace CollegeWebsiteAdmin.Controllers
         {
           return (_context.Subjects?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+
+        // POST: Subjects/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubjectCreate([Bind("Id,SubjectName")] Subject s1)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(s1);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
+            }
+            return View(s1);
+        }
     }
 }

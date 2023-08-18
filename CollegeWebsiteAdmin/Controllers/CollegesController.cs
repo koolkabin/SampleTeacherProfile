@@ -206,5 +206,30 @@ namespace CollegeWebsiteAdmin.Controllers
         {
           return (_context.Colleges?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        // POST: Colleges/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MyOwnCreate(
+            [Bind("Id,CollegeName,Address,Telephone,Email,Website,UploadedPhoto")] Colleges c1)
+        {
+            string fileName = await UploadHelper(c1);
+            c1.LogoFile = fileName;
+
+            #region Revalidation of user given Data
+            ModelState.Clear();
+            TryValidateModel(c1);
+            #endregion
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(c1);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(c1);
+        }
     }
 }

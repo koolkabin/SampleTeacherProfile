@@ -48,6 +48,7 @@ namespace CollegeWebsiteAdmin.Controllers
         }
 
         // GET: Teachers/Create
+        //no attributes of method i.e default get method will be used
         public IActionResult Create()
         {
             return View();
@@ -58,7 +59,8 @@ namespace CollegeWebsiteAdmin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto")] Teacher Data)
+        public async Task<IActionResult> Create(
+            [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto")] Teacher Data)
         {
             string fileName = await UploadHelper(Data);
             Data.ProfilePhotoName = fileName;
@@ -203,6 +205,27 @@ namespace CollegeWebsiteAdmin.Controllers
             }
             #endregion
             return fileName;
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateMatching(
+            [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto")] Teacher t1)
+        {
+            string fileName = await UploadHelper(t1);
+            t1.ProfilePhotoName = fileName;
+
+            #region Revalidation of user given Data
+            ModelState.Clear();
+            TryValidateModel(t1);
+            #endregion
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(t1);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(t1);
         }
 
     }

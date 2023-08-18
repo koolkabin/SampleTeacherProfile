@@ -6,3 +6,31 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+
+<div class="row">
+    <div class="col-4">
+        <h3>Teacher Form</h3>
+        @{
+            Teacher t1 = new Teacher();
+            @Html.EditorFor(x=>t1)
+        }
+    </div>
+    <div class="col-4">
+        <h3>College Form</h3>
+
+        @{
+            Colleges c1 = new Colleges();
+            @Html.EditorFor(x=>c1)
+
+        }
+    </div>
+    <div class="col-4">
+        <h3>Subject Form</h3>
+
+        @{
+            Subject s1 = new Subject();
+            @Html.EditorFor(x=>s1)
+        }
+    </div>
+</div>
