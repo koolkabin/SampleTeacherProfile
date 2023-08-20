@@ -33,4 +33,66 @@
             @Html.EditorFor(x=>s1)
         }
     </div>
+
+    <div class="col-4">
+        <h3>College Form</h3>
+        @*tilde ~*@
+        <form action="~/Colleges/NewCollege" method="post" enctype="multipart/form-data" id="frmNewColelgeForm">
+            <div class="row">
+                <label class="col-4">College Name</label>
+                <div class="col-8">
+                    <input type="text" name="CollegeName" value="" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-4">Address</label>
+                <div class="col-8">
+                    <input type="text" name="Address" value="" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-4">Telephone</label>
+                <div class="col-8">
+                    <input type="text" name="Telephone" value="" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-4"></label>
+                <div class="col-8">
+                    <button class="btn btn-success" type="submit">
+                        Submit
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+
+@section scripts
+    {
+    <script>
+        $(document).ready(function () {
+            $('#frmNewColelgeForm').on('submit', function (e) {
+
+                //make some ajax call and submit data to it
+                var fData = $(this).serialize();
+                //get form data to fData Variable
+                $.post('/Colleges/NewCollege', fData, function (res) {
+                    
+                    alert(res);
+                    console.log(res);
+
+                    //again next action form clear garnu 
+                    //form refresh aany other action can be done
+                    //this function will be called only after ajax request is completed and if it is success
+                });
+
+
+                //stops normal form submission using normal html process
+                e.preventDefault();
+                return false;
+            });
+        });
+    </script>
+                }

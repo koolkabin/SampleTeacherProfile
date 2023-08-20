@@ -24,9 +24,9 @@ namespace CollegeWebsiteAdmin.Controllers
         // GET: Colleges
         public async Task<IActionResult> Index()
         {
-              return _context.Colleges != null ? 
-                          View(await _context.Colleges.ToListAsync()) :
-                          Problem("Entity set 'MyDBContext.Colleges'  is null.");
+            return _context.Colleges != null ?
+                        View(await _context.Colleges.ToListAsync()) :
+                        Problem("Entity set 'MyDBContext.Colleges'  is null.");
         }
 
         // GET: Colleges/Details/5
@@ -197,14 +197,14 @@ namespace CollegeWebsiteAdmin.Controllers
             {
                 _context.Colleges.Remove(colleges);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CollegesExists(int id)
         {
-          return (_context.Colleges?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Colleges?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
         // POST: Colleges/Create
@@ -231,5 +231,44 @@ namespace CollegeWebsiteAdmin.Controllers
             }
             return View(c1);
         }
+
+        //method 1 for manual catching
+        [HttpPost]
+        public async Task<IActionResult> NewCollege(string CollegeName, string Address, string Telephone)
+        {
+
+            //code for inserting data to datatabse
+            Teacher t1 = new Teacher()
+            {
+                TeacherName = CollegeName,
+                Address = Address,
+                Telephone = Telephone,
+                Email = "unknownemail@gmail.com",
+                ProfilePhotoName = "N/A"
+            };
+
+            //shortcut way to insert data in related table
+            _context.Add(t1);
+
+            //long way  to insert data in related table
+            _context.Add<Teacher>(t1);
+
+            //make changes to db in permanent way
+            _context.SaveChanges();
+
+
+
+
+
+            return Content("Done");// new JsonContent(new { status=true, msg="Data Saved Succesfully"});
+        }
+
+        //method 2 for manual catching
+        [HttpPost]
+        public async Task<IActionResult> NewCollegeClass(Colleges Data)
+        {
+            return View();
+        }
+
     }
 }
