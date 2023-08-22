@@ -1,0 +1,89 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h3>Page to add subjects in Bulk and convinet way</h3>
+<form asp-action="AjaxAdd" method="post" id="frmAdd">
+    <input type="hidden" class="form-control" name="id" id="id" value="123456789" />
+    <div class="row">
+        <div class="col-3">Subject:</div>
+        <div class="col-3">
+            <input type="text" class="form-control" name="SubjectName" id="SubjectName" />
+        </div>
+        <div class="col-3">
+            <button class="btn btn-success" type="submit">
+                Save
+            </button>
+        </div>
+    </div>
+</form>
+<div class="row">
+    <div class="col-12">
+        <table class="table table-stripped table-bordered">
+            <tr>
+                <th>SN</th>
+                <th>Subject</th>
+            </tr>
+            <tbody id="sectionForAddingNew">
+                <tr>
+                    <td>1</td>
+                    <td>Nepali</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        //function to get json data from controller/action: todoapp -> ajaxList
+        //it will also process/loop and append data over -> mentioned section
+
+        function getDataList() {
+            //console.log('calling ajax list page')
+            $.get('/TodoApp/AjaxList', function (res) {
+                //process them
+                //console.log('got result from server./..');
+                //console.log(res);
+                $('#sectionForAddingNew').html('');
+                for (i = 0; i < res.length; i++) {
+                    obj = res[i];
+                    $('#sectionForAddingNew').append('<tr><td>' + (i + 1) + '</td><td>' + obj.subjectName + '</td></tr>');
+                }
+            });
+        }
+        $(document).ready(function () {
+            //page load ma call garne
+            getDataList();
+
+            $('#frmAdd').on('submit', function (e) {
+
+                //add code for submitting data via ajax method
+                //1. get for data
+                var data = $(this).serialize(); 
+                console.log(data);
+                //key value pair match and set garne kaam garcha
+
+                //submit to todoapp controller -> ajaxadd action
+                $.post('/TodoApp/AjaxAdd', data, function (e) {
+                    //fire and forget
+                    console.log('called after success');
+                    //alert('done');
+                    $('#SubjectName').val('');
+                    //code to refresh ajax list
+                    getDataList();
+
+                });
+                //asdasd
+
+
+                //stops data submission via html way
+                e.preventDefault();
+                return false;
+            });
+        });
+
+     
+    </script>
+                }
