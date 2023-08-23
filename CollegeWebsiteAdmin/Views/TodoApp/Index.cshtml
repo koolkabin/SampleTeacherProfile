@@ -24,6 +24,7 @@
             <tr>
                 <th>SN</th>
                 <th>Subject</th>
+                <th>Action</th>
             </tr>
             <tbody id="sectionForAddingNew">
                 <tr>
@@ -49,13 +50,28 @@
                 $('#sectionForAddingNew').html('');
                 for (i = 0; i < res.length; i++) {
                     obj = res[i];
-                    $('#sectionForAddingNew').append('<tr><td>' + (i + 1) + '</td><td>' + obj.subjectName + '</td></tr>');
+                    $('#sectionForAddingNew').append('<tr><td>' + (i + 1) + '</td><td>' + obj.subjectName + '</td><td><a class="ajaxDelete" href="/TodoApp/AjaxDelete/'+ obj.id +'">Delete</a></td></tr>');
                 }
             });
         }
         $(document).ready(function () {
             //page load ma call garne
             getDataList();
+
+            $(document).on('click', '.ajaxDelete', function (e) {
+                e.preventDefault();
+
+                url = $(this).attr('href');
+
+                $.post(url, '',function(e){
+                    //alert ('deleted');
+                    getDataList();
+                });
+
+
+
+                return false;
+            });
 
             $('#frmAdd').on('submit', function (e) {
 

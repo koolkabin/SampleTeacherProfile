@@ -98,6 +98,9 @@ namespace CollegeWebsiteAdmin.Controllers
             {
                 try
                 {
+                    //match id should -> Primary key value
+                    //while updating it will overwrite all column data of table row
+
                     _context.Update(subject);
                     await _context.SaveChangesAsync();
                 }

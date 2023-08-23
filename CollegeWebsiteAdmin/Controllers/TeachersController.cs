@@ -172,7 +172,8 @@ namespace CollegeWebsiteAdmin.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home", new {id=123});
         }
 
         private bool TeacherExists(int id)

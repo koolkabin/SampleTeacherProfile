@@ -83,6 +83,10 @@ namespace CollegeWebsiteAdmin.Controllers
             #region For File Upload Process
 
             //File UPload 
+            if (colleges.UploadedPhoto == null)
+            {
+                return "N/A";
+            }
             string fileName = colleges.UploadedPhoto.FileName;
 
             string destinationPath = Path.Combine(_MyEnvVariable.WebRootPath, "private/college/");
@@ -146,7 +150,17 @@ namespace CollegeWebsiteAdmin.Controllers
             {
                 try
                 {
-                    _context.Update(Data);
+                    Colleges oldData = _context.Colleges.Find(id);
+                    if (oldData == null)
+                    {
+                        throw new Exception("Invalid Old Data Ref ID");
+                    }
+                    oldData.CollegeName = Data.CollegeName;
+                    oldData.Address = Data.Address;
+
+
+                    _context.Update(oldData);
+                    //overwrites all column data of selected matching primary key record
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

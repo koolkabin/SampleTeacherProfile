@@ -56,5 +56,28 @@ namespace CollegeWebsiteAdmin.Controllers
 
 
         }
+        public IActionResult AjaxDelete(int id)
+        {
+            try
+            {
+                Subject OldRecrd = _context.Subjects.Find(id);
+                if (OldRecrd == null)
+                {
+                    return Json(new { status = false, msg = "Record not found" });
+                }
+
+
+                _context.Subjects.Remove(OldRecrd);
+                _context.SaveChanges();
+                return Json(new { status = true });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, err = ex.Message });
+            }
+
+
+        }
     }
 }

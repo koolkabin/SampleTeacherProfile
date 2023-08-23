@@ -7,7 +7,8 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
+    <a href="@Url.Action("Index", "Home" , new {id=123, name="ram", @class="BBA"})" class="btn btn-danger">Action 1</a>
 </p>
 <table class="table">
     <thead>
