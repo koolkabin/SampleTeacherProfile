@@ -23,6 +23,7 @@ namespace CollegeWebsiteAdmin.Models
         public DbSet<Subject> Subjects { get;set; }
         public DbSet<Colleges> Colleges { get;set; }
         public DbSet<Teacher> Teachers { get;set; }
+        public DbSet<TeacherSubjects> TeacherSubjects { get;set; }
     }
 
 
