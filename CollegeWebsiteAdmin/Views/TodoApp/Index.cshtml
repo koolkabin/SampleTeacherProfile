@@ -36,8 +36,55 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-4">
+        <button id="btn5" class="btn btn-warning">
+            Lets check Handle Bars
+        </button>
+    </div>
+    <div class="col-4" id="outputHere">
+        handle bar output will be shown here
+    </div>
+</div>
+
 @section scripts{
+
+    <script type="text/x-handlebars-template" id="tmplHandlebar1">
+        Hello this is mY {{firstname}} and this is my lastname {{lastname}}
+    </script>
+
+    <script type="text/x-handlebars-template" id="tmpTableData">
+        {{#each myData}}
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.subjectName}}</td>
+            <td>
+                <a class="ajaxDelete" href="/TodoApp/AjaxDelete/{{this.id}}">Delete</a>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
     <script>
+
+        $(document).ready(function (e) {
+            $('#btn5').on('click', function (e) {
+                e.preventDefault();
+
+
+                var data = { firstname: 'Hari', lastname: 'shyam' }
+
+                // compile the template
+                var template = Handlebars.compile($('#tmplHandlebar1').html());
+                // execute the compiled template and print the output to the console
+                var result = template(data);
+
+                $('#outputHere').html(result);
+
+                getDataList();
+
+            });
+        });
+
         //function to get json data from controller/action: todoapp -> ajaxList
         //it will also process/loop and append data over -> mentioned section
 
@@ -48,22 +95,35 @@
                 //console.log('got result from server./..');
                 //console.log(res);
                 $('#sectionForAddingNew').html('');
-                for (i = 0; i < res.length; i++) {
-                    obj = res[i];
-                    $('#sectionForAddingNew').append('<tr><td>' + (i + 1) + '</td><td>' + obj.subjectName + '</td><td><a class="ajaxDelete" href="/TodoApp/AjaxDelete/'+ obj.id +'">Delete</a></td></tr>');
-                }
+
+                var data = {myData: res};
+
+                // compile the template
+                var template = Handlebars.compile($('#tmpTableData').html());
+                // execute the compiled template and print the output to the console
+                var result = template(data);
+
+                $('#sectionForAddingNew').html(result);
+
+                //for (i = 0; i < res.length; i++) {
+                //    obj = res[i];
+                //    //near about manual
+                //    $('#sectionForAddingNew').append();
+                //}
+                //DOM Manipulation
+
             });
         }
         $(document).ready(function () {
             //page load ma call garne
-            getDataList();
+            //getDataList();
 
             $(document).on('click', '.ajaxDelete', function (e) {
                 e.preventDefault();
 
                 url = $(this).attr('href');
 
-                $.post(url, '',function(e){
+                $.post(url, '', function (e) {
                     //alert ('deleted');
                     getDataList();
                 });
@@ -77,7 +137,7 @@
 
                 //add code for submitting data via ajax method
                 //1. get for data
-                var data = $(this).serialize(); 
+                var data = $(this).serialize();
                 console.log(data);
                 //key value pair match and set garne kaam garcha
 
@@ -100,6 +160,6 @@
             });
         });
 
-     
+
     </script>
                 }
