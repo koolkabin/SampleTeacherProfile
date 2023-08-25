@@ -26,28 +26,35 @@ namespace CollegeWebsiteAdmin.Models
         //in case of 1 to many relation: collection property
         //it won't be stored in db
         public virtual ICollection<TeacherSubjects> TeacherSubjects { get; set; }
+        public virtual ICollection<CollegeTeachers> CollegeTeachers { get; set; }
         public Teacher()
         {
             TeacherSubjects = new HashSet<TeacherSubjects>();
+            CollegeTeachers = new HashSet<CollegeTeachers>();
         }
 
     }
 
-    public class TeacherSubjects
+    public class District
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [ForeignKey("Teachers")]
-        //method data annotation method
-        public int TeacherID { get; set; } //assumes as 1 to many relationship
-        public int SubjectID { get; set; }//assumes as 1 to many relationship
-
-        //child to parent navigation property 
-        public virtual Teacher Teacher { get; set; }
-
-        //support
-        //navigation property
+        public string DistrictName { get; set; }
+        public int ProvinceId { get; set; }
+        public virtual Province Province { get; set; }
     }
+    public class Province
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public string ProvinceName { get; set; }
+        public virtual ICollection<District> District { get; set; }
+        public Province()
+        {
+            District = new HashSet<District>();
+        }
 
-
+    }
 }

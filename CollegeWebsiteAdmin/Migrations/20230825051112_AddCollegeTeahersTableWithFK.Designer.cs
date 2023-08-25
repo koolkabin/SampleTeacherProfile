@@ -4,6 +4,7 @@ using CollegeWebsiteAdmin.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CollegeWebsiteAdmin.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    partial class MyDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230825051112_AddCollegeTeahersTableWithFK")]
+    partial class AddCollegeTeahersTableWithFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,45 +95,6 @@ namespace CollegeWebsiteAdmin.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Colleges");
-                });
-
-            modelBuilder.Entity("CollegeWebsiteAdmin.Models.District", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("DistrictName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProvinceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProvinceId");
-
-                    b.ToTable("District");
-                });
-
-            modelBuilder.Entity("CollegeWebsiteAdmin.Models.Province", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ProvinceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Province");
                 });
 
             modelBuilder.Entity("CollegeWebsiteAdmin.Models.Subject", b =>
@@ -231,17 +195,6 @@ namespace CollegeWebsiteAdmin.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("CollegeWebsiteAdmin.Models.District", b =>
-                {
-                    b.HasOne("CollegeWebsiteAdmin.Models.Province", "Province")
-                        .WithMany("District")
-                        .HasForeignKey("ProvinceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Province");
-                });
-
             modelBuilder.Entity("CollegeWebsiteAdmin.Models.TeacherSubjects", b =>
                 {
                     b.HasOne("CollegeWebsiteAdmin.Models.Subject", "Subject")
@@ -264,11 +217,6 @@ namespace CollegeWebsiteAdmin.Migrations
             modelBuilder.Entity("CollegeWebsiteAdmin.Models.Colleges", b =>
                 {
                     b.Navigation("CollegeTeachers");
-                });
-
-            modelBuilder.Entity("CollegeWebsiteAdmin.Models.Province", b =>
-                {
-                    b.Navigation("District");
                 });
 
             modelBuilder.Entity("CollegeWebsiteAdmin.Models.Subject", b =>

@@ -11,6 +11,12 @@ namespace CollegeWebsiteAdmin.Models
         [MaxLength(255)]
         public string SubjectName { get; set; }
 
+        public virtual ICollection<TeacherSubjects> TeacherSubjects { get;set; }
+        public Subject()
+        {
+            TeacherSubjects = new HashSet<TeacherSubjects>();
+        }
+
     }
 
 

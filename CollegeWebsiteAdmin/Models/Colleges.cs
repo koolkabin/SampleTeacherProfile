@@ -13,16 +13,21 @@ namespace CollegeWebsiteAdmin.Models
         [MaxLength(255)]
         public string Address { get; set; }
         [MaxLength(255)]
-        public string Telephone{ get; set; }
+        public string Telephone { get; set; }
         [MaxLength(255)]
         public string Email { get; set; }
         [MaxLength(255)]
-        public string Website{ get; set; }
+        public string Website { get; set; }
         [MaxLength(255)]
         public string LogoFile { get; set; }
         [NotMapped]
         public IFormFile UploadedPhoto { get; set; }
 
+        public ICollection<CollegeTeachers> CollegeTeachers { get; set; }
+        public Colleges()
+        {
+            CollegeTeachers = new HashSet<CollegeTeachers>();
+        }
     }
 
 
