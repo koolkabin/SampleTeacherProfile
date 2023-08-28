@@ -24,9 +24,9 @@ namespace CollegeWebsiteAdmin.Controllers
         // GET: Teachers
         public async Task<IActionResult> Index()
         {
-              return _context.Teachers != null ? 
-                          View(await _context.Teachers.ToListAsync()) :
-                          Problem("Entity set 'MyDBContext.Teachers'  is null.");
+            return _context.Teachers != null ?
+                        View(await _context.Teachers.ToListAsync()) :
+                        Problem("Entity set 'MyDBContext.Teachers'  is null.");
         }
 
         // GET: Teachers/Details/5
@@ -51,6 +51,10 @@ namespace CollegeWebsiteAdmin.Controllers
         //no attributes of method i.e default get method will be used
         public IActionResult Create()
         {
+            //List of subjects get and pass to view
+            IList<Subject> subJectList = _context.Subjects.ToList();
+            ViewData["SubjectList"] = subJectList;
+
             return View();
         }
 
@@ -92,6 +96,12 @@ namespace CollegeWebsiteAdmin.Controllers
             {
                 return NotFound();
             }
+            //List of subjects get and pass to view
+            IList<Subject> subJectList = _context.Subjects.ToList();
+            ViewData["SubjectList"] = subJectList;
+
+            _context.Entry(teacher).Collection(x => x.TeacherSubjects).Load();
+
             return View(teacher);
         }
 
@@ -170,15 +180,15 @@ namespace CollegeWebsiteAdmin.Controllers
             {
                 _context.Teachers.Remove(teacher);
             }
-            
+
             await _context.SaveChangesAsync();
             //return RedirectToAction(nameof(Index));
-            return RedirectToAction("Index", "Home", new {id=123});
+            return RedirectToAction("Index", "Home", new { id = 123 });
         }
 
         private bool TeacherExists(int id)
         {
-          return (_context.Teachers?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Teachers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
         private async Task<string> UploadHelper(Teacher colleges)
@@ -210,11 +220,16 @@ namespace CollegeWebsiteAdmin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateMatching(
-            [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto")] Teacher t1)
+            [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto")] Teacher t1
+            , int[] selSubject)
         {
+
             string fileName = await UploadHelper(t1);
             t1.ProfilePhotoName = fileName;
-
+            t1.Address = "NA";
+            t1.TeacherName = "asads";
+            t1.Email = "asdas@gmail.com";
+            t1.Telephone = "123123";
             #region Revalidation of user given Data
             ModelState.Clear();
             TryValidateModel(t1);
@@ -222,6 +237,17 @@ namespace CollegeWebsiteAdmin.Controllers
 
             if (ModelState.IsValid)
             {
+                foreach (var item in selSubject)
+                {
+                    var rec = new TeacherSubjects()
+                    {
+                        //TeacherID = //auto generate wala ho.. confusion
+                        SubjectID = item
+                    };
+
+                    t1.TeacherSubjects.Add(rec);
+                }
+
                 _context.Add(t1);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

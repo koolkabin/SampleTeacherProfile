@@ -22,6 +22,7 @@ namespace CollegeWebsiteAdmin.Controllers
         public async Task<IActionResult> Index()
         {
             var myDBContext = _context.District.Include(d => d.Province);
+            //join district and province -> eger loading mechanism
             return View(await myDBContext.ToListAsync());
         }
 
@@ -161,14 +162,14 @@ namespace CollegeWebsiteAdmin.Controllers
             {
                 _context.District.Remove(district);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool DistrictExists(int id)
         {
-          return (_context.District?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.District?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

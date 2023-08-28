@@ -11,10 +11,7 @@
 <div class="row">
     <div class="col-4">
         <h3>Teacher Form</h3>
-        @{
-            Teacher t1 = new Teacher();
-            @Html.EditorFor(x=>t1)
-        }
+
     </div>
     <div class="col-4" id="formToHide">
         <h3>College Form</h3>
@@ -79,7 +76,7 @@
     {
     <script>
 
-        $('#btnAc2').on('dblclick', function(e){
+        $('#btnAc2').on('dblclick', function (e) {
             $('#formToHide').slideDown(500); //with animation of 500 miliseconds
 
         });
@@ -92,7 +89,7 @@
         });
         $('#btnAct1').on('click', function (e) {
             //alert("ntn clicke");
-            $('#formToHide').hide(500); //with animation of 500 miliseconds 
+            $('#formToHide').hide(500); //with animation of 500 miliseconds
 
         });
         $('#btnAct2').on('click', function (e) {

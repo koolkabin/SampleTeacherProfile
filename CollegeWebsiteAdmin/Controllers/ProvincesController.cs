@@ -21,9 +21,9 @@ namespace CollegeWebsiteAdmin.Controllers
         // GET: Provinces
         public async Task<IActionResult> Index()
         {
-              return _context.Province != null ? 
-                          View(await _context.Province.ToListAsync()) :
-                          Problem("Entity set 'MyDBContext.Province'  is null.");
+            return _context.Province != null ?
+                        View(await _context.Province.ToListAsync()) :
+                        Problem("Entity set 'MyDBContext.Province'  is null.");
         }
 
         // GET: Provinces/Details/5
@@ -41,6 +41,24 @@ namespace CollegeWebsiteAdmin.Controllers
                 return NotFound();
             }
 
+            //for explicit loading;
+            _context.Entry(province).Collection(x => x.District).Load();
+
+            ////normal db context/table ma where condition apply
+            //IList<District> RelatedDisrct = _context.District
+            //    // Lambda expression
+            //    .Where(x => x.ProvinceId == id)
+            //    .ToList();
+
+            ////manually override values
+            //province.District = RelatedDisrct;
+
+            ////where condition will be auto appilied by -> navigation property
+            //IList<District> RelDist = province.District.ToList();
+
+
+            //Eger Loading or explicint loading
+            //Lazy loading -> discard
             return View(province);
         }
 
@@ -149,14 +167,14 @@ namespace CollegeWebsiteAdmin.Controllers
             {
                 _context.Province.Remove(province);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProvinceExists(int id)
         {
-          return (_context.Province?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Province?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

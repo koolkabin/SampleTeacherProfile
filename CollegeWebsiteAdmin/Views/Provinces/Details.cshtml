@@ -10,13 +10,37 @@
     <h4>Province</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ProvinceName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ProvinceName)
         </dd>
     </dl>
+
+    <table class="table table-stripped table-bordered">
+        <thead>
+            <tr>
+                <th>SN</th>
+                <th>Distrct</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.District)
+            {
+                <tr>
+                    <td>@(item.Id)</td>
+                    <td>@(item.DistrictName)</td>
+                    <td>
+                        <a href="#" class="btn btn-danger">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |

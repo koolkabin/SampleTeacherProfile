@@ -1,5 +1,6 @@
 ﻿using CollegeWebsiteAdmin.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace CollegeWebsiteAdmin.Controllers
@@ -15,6 +16,8 @@ namespace CollegeWebsiteAdmin.Controllers
 
         public IActionResult Index()
         {
+          
+
             return View();
         }
 
