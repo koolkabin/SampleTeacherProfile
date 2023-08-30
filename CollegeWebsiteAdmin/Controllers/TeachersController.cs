@@ -99,6 +99,10 @@ namespace CollegeWebsiteAdmin.Controllers
             //List of subjects get and pass to view
             IList<Subject> subJectList = _context.Subjects.ToList();
             ViewData["SubjectList"] = subJectList;
+            
+            //List of subjects get and pass to view
+            IList<Colleges> CollegeList = _context.Colleges.ToList();
+            ViewData["CollegeList"] = CollegeList;
 
             _context.Entry(teacher).Collection(x => x.TeacherSubjects).Load();
 
@@ -221,7 +225,7 @@ namespace CollegeWebsiteAdmin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateMatching(
             [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto")] Teacher t1
-            , int[] selSubject)
+            , int[] selSubject, IList<CollegeTeachers> CollegeTeacherData)
         {
 
             string fileName = await UploadHelper(t1);
@@ -248,12 +252,61 @@ namespace CollegeWebsiteAdmin.Controllers
                     t1.TeacherSubjects.Add(rec);
                 }
 
+                foreach (var item in CollegeTeacherData)
+                {
+                    var rec = new CollegeTeachers()
+                    {
+                        //TeacherID = //auto generate wala ho.. confusion
+                        CollegeId = item.CollegeId,
+                        FromTime = item.FromTime,
+                        ToTime=item.ToTime
+                    };
+
+                    t1.CollegeTeachers.Add(rec);
+                }
                 _context.Add(t1);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(t1);
         }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> CreateMatching(
+        //  [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto")] Teacher t1
+        //  , CollegeTeachers[] CollegeTeacherData)
+        //{
+
+        //    string fileName = await UploadHelper(t1);
+        //    t1.ProfilePhotoName = fileName;
+        //    t1.Address = "NA";
+        //    t1.TeacherName = "asads";
+        //    t1.Email = "asdas@gmail.com";
+        //    t1.Telephone = "123123";
+        //    #region Revalidation of user given Data
+        //    ModelState.Clear();
+        //    TryValidateModel(t1);
+        //    #endregion
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        foreach (var item in selSubject)
+        //        {
+        //            var rec = new TeacherSubjects()
+        //            {
+        //                //TeacherID = //auto generate wala ho.. confusion
+        //                SubjectID = item
+        //            };
+
+        //            t1.TeacherSubjects.Add(rec);
+        //        }
+
+        //        _context.Add(t1);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(t1);
+        //}
 
     }
 }

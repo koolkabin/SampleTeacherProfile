@@ -45,6 +45,61 @@
         }
     </div>
 
+    @* <input name="CollegeTeacherData[0].CollegeId" value="12" />
+    <input name="CollegeTeacherData[0].FromTime" value="12" />
+    <input name="CollegeTeacherData[0].ToTime" value="12" />
+
+
+    <input name="CollegeTeacherData[2].CollegeId" value="12" />
+    <input name="CollegeTeacherData[2].FromTime" value="12" />
+    <input name="CollegeTeacherData[2].ToTime" value="12" />
+
+    <!-- associative array -->
+
+    <input name="CollegeTeacherData.index" value="rec1" />
+    <input name="CollegeTeacherData[rec1].CollegeId" value="12" />
+    <input name="CollegeTeacherData[rec1].FromTime" value="12" />
+    <input name="CollegeTeacherData[rec1].ToTime" value="12" />
+
+    <input name="CollegeTeacherData.index" value="abc1" />
+    <input name="CollegeTeacherData[abc1].CollegeId" value="12" />
+    <input name="CollegeTeacherData[abc1].FromTime" value="12" />
+    <input name="CollegeTeacherData[abc1].ToTime" value="12" />
+    *@
+
+    <table class="table table-bordered">
+        <tr>
+            <th>College</th>
+            <th>From</th>
+            <th>To</th>
+        </tr>
+        @{
+            IList<Colleges> GivenColleges = ViewBag.CollegeList;
+            for (int i = 1; i <= 5; i++)
+            {
+
+                string k1 = "rec_" + i.ToString();
+                <tr>
+                    <td>
+                        <input type="hidden" name="CollegeTeacherData.index" value="@k1" />
+                        <select name="CollegeTeacherData[@k1].CollegeId">
+                            @foreach (var item in GivenColleges)
+                            {
+                                <option value="@item.Id">@item.CollegeName</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" name="CollegeTeacherData[@k1].FromTime" />
+                    </td>
+                    <td>
+                        <input type="text" name="CollegeTeacherData[@k1].ToTime" />
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>
