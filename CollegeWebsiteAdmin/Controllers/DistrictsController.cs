@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CollegeWebsiteAdmin.Models;
+using CollegeWebsiteAdmin.CustomAttibutes;
 
 namespace CollegeWebsiteAdmin.Controllers
 {
+
     public class DistrictsController : Controller
     {
         private readonly MyDBContext _context;
@@ -19,6 +21,7 @@ namespace CollegeWebsiteAdmin.Controllers
         }
 
         // GET: Districts
+        [CustomAuthenticationAttribute]
         public async Task<IActionResult> Index()
         {
             var myDBContext = _context.District.Include(d => d.Province);

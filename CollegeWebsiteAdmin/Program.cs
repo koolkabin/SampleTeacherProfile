@@ -16,6 +16,14 @@ IConfiguration configuration = new ConfigurationBuilder()
 builder.Services.AddDbContext<MyDBContext>(options =>
     options.UseSqlServer(configuration.GetConnectionString("ABCDatabase")));
 
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = ".My.Session";
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.IsEssential = true;
+});
+
+
 
 var app = builder.Build();
 
@@ -33,6 +41,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

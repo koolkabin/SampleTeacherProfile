@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CollegeWebsiteAdmin.Models;
+using CollegeWebsiteAdmin.Extensions;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace CollegeWebsiteAdmin.Controllers
 {
@@ -21,6 +23,14 @@ namespace CollegeWebsiteAdmin.Controllers
         // GET: Provinces
         public async Task<IActionResult> Index()
         {
+            Teacher SessionValue = HttpContext.Session.Get<Teacher>("LoggedInUser");
+
+            if (SessionValue == null)
+            {
+                //
+                return RedirectToAction("Login", "Home");
+            }
+
             return _context.Province != null ?
                         View(await _context.Province.ToListAsync()) :
                         Problem("Entity set 'MyDBContext.Province'  is null.");

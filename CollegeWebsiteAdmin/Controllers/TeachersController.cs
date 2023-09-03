@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CollegeWebsiteAdmin.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using CollegeWebsiteAdmin.Extensions;
 
 namespace CollegeWebsiteAdmin.Controllers
 {
@@ -24,6 +25,15 @@ namespace CollegeWebsiteAdmin.Controllers
         // GET: Teachers
         public async Task<IActionResult> Index()
         {
+            Teacher SessionValue = HttpContext.Session.Get<Teacher>("LoggedInUser");
+
+            if (SessionValue == null)
+            {
+                //
+                return RedirectToAction("Login", "Home");
+            }
+
+
             return _context.Teachers != null ?
                         View(await _context.Teachers.ToListAsync()) :
                         Problem("Entity set 'MyDBContext.Teachers'  is null.");
@@ -99,7 +109,7 @@ namespace CollegeWebsiteAdmin.Controllers
             //List of subjects get and pass to view
             IList<Subject> subJectList = _context.Subjects.ToList();
             ViewData["SubjectList"] = subJectList;
-            
+
             //List of subjects get and pass to view
             IList<Colleges> CollegeList = _context.Colleges.ToList();
             ViewData["CollegeList"] = CollegeList;
@@ -259,7 +269,7 @@ namespace CollegeWebsiteAdmin.Controllers
                         //TeacherID = //auto generate wala ho.. confusion
                         CollegeId = item.CollegeId,
                         FromTime = item.FromTime,
-                        ToTime=item.ToTime
+                        ToTime = item.ToTime
                     };
 
                     t1.CollegeTeachers.Add(rec);
