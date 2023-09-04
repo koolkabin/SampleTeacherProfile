@@ -20,8 +20,6 @@ namespace CollegeWebsiteAdmin.Models
         public string Website { get; set; }
         [MaxLength(255)]
         public string LogoFile { get; set; }
-        [NotMapped]
-        public IFormFile UploadedPhoto { get; set; }
 
         public ICollection<CollegeTeachers> CollegeTeachers { get; set; }
         public Colleges()

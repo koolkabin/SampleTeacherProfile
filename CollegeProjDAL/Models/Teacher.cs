@@ -18,8 +18,6 @@ namespace CollegeWebsiteAdmin.Models
         public string Email { get; set; }
         [MaxLength(255)]
         public string ProfilePhotoName { get; set; }
-        [NotMapped]
-        public IFormFile UploadedPhoto { get; set; }
         public string Password { get; set; }
 
         //navigation property from parent to child

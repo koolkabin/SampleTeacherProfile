@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CollegeWebsiteAdmin.Models;
 using Microsoft.AspNetCore.Hosting;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CollegeWebsiteAdmin.Controllers
 {
@@ -59,9 +60,9 @@ namespace CollegeWebsiteAdmin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Id,CollegeName,Address,Telephone,Email,Website,UploadedPhoto")] Colleges Data)
+            [Bind("Id,CollegeName,Address,Telephone,Email,Website,UploadedPhoto")] Colleges Data, IFormFile UploadedPhoto)
         {
-            string fileName = await UploadHelper(Data);
+            string fileName = await UploadHelper(UploadedPhoto);
             Data.LogoFile = fileName;
 
             #region Revalidation of user given Data
@@ -78,16 +79,16 @@ namespace CollegeWebsiteAdmin.Controllers
             return View(Data);
         }
 
-        private async Task<string> UploadHelper(Colleges colleges)
+        private async Task<string> UploadHelper(IFormFile UploadedPhoto)
         {
             #region For File Upload Process
 
             //File UPload 
-            if (colleges.UploadedPhoto == null)
+            if (UploadedPhoto == null)
             {
                 return "N/A";
             }
-            string fileName = colleges.UploadedPhoto.FileName;
+            string fileName = UploadedPhoto.FileName;
 
             string destinationPath = Path.Combine(_MyEnvVariable.WebRootPath, "private/college/");
 
@@ -103,7 +104,7 @@ namespace CollegeWebsiteAdmin.Controllers
             // Save the uploaded file
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                await colleges.UploadedPhoto.CopyToAsync(stream);
+                await UploadedPhoto.CopyToAsync(stream);
             }
             #endregion
             return fileName;
@@ -130,14 +131,14 @@ namespace CollegeWebsiteAdmin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CollegeName,Address,Telephone,Email,Website,UploadedPhoto")] Colleges Data)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CollegeName,Address,Telephone,Email,Website,UploadedPhoto")] Colleges Data, IFormFile UploadedPhoto)
         {
             if (id != Data.Id)
             {
                 return NotFound();
             }
 
-            string fileName = await UploadHelper(Data);
+            string fileName = await UploadHelper(UploadedPhoto);
             Data.LogoFile = fileName;
 
             #region Revalidation of user given Data
@@ -227,9 +228,9 @@ namespace CollegeWebsiteAdmin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MyOwnCreate(
-            [Bind("Id,CollegeName,Address,Telephone,Email,Website,UploadedPhoto")] Colleges c1)
+            [Bind("Id,CollegeName,Address,Telephone,Email,Website,UploadedPhoto")] Colleges c1, IFormFile UploadedPhoto)
         {
-            string fileName = await UploadHelper(c1);
+            string fileName = await UploadHelper(UploadedPhoto);
             c1.LogoFile = fileName;
 
             #region Revalidation of user given Data

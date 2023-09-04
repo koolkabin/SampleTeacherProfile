@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.Diagnostics;
-using CollegeWebsiteAdmin.Models;
 
 namespace CollegeWebsiteAdmin.Models
 {

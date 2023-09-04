@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CollegeWebsiteAdmin.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using CollegeWebsiteAdmin.Extensions;
+using CollegeWebsiteAdmin.ViewModels;
 
 namespace CollegeWebsiteAdmin.Controllers
 {
@@ -75,7 +76,7 @@ namespace CollegeWebsiteAdmin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto")] Teacher Data)
+            [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto")] VMTeacherInput Data)
         {
             string fileName = await UploadHelper(Data);
             Data.ProfilePhotoName = fileName;
@@ -131,7 +132,7 @@ namespace CollegeWebsiteAdmin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto")] Teacher Data)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto")] VMTeacherInput Data)
         {
             if (id != Data.Id)
             {
@@ -213,7 +214,7 @@ namespace CollegeWebsiteAdmin.Controllers
             return (_context.Teachers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        private async Task<string> UploadHelper(Teacher colleges)
+        private async Task<string> UploadHelper(VMTeacherInput colleges)
         {
             #region For File Upload Process
 
@@ -242,7 +243,7 @@ namespace CollegeWebsiteAdmin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateMatching(
-            [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto, Password")] Teacher t1
+            [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto, Password")] VMTeacherInput t1
             , int[] selSubject, IList<CollegeTeachers> CollegeTeacherData)
         {
 
