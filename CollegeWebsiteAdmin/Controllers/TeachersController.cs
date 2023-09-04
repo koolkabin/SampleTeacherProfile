@@ -64,6 +64,7 @@ namespace CollegeWebsiteAdmin.Controllers
             //List of subjects get and pass to view
             IList<Subject> subJectList = _context.Subjects.ToList();
             ViewData["SubjectList"] = subJectList;
+            _AddEditCommon();
 
             return View();
         }
@@ -90,6 +91,7 @@ namespace CollegeWebsiteAdmin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            _AddEditCommon();
             return View(Data);
         }
 
@@ -106,6 +108,15 @@ namespace CollegeWebsiteAdmin.Controllers
             {
                 return NotFound();
             }
+            _AddEditCommon();
+
+            _context.Entry(teacher).Collection(x => x.TeacherSubjects).Load();
+
+            return View(teacher);
+        }
+
+        private void _AddEditCommon()
+        {
             //List of subjects get and pass to view
             IList<Subject> subJectList = _context.Subjects.ToList();
             ViewData["SubjectList"] = subJectList;
@@ -113,10 +124,6 @@ namespace CollegeWebsiteAdmin.Controllers
             //List of subjects get and pass to view
             IList<Colleges> CollegeList = _context.Colleges.ToList();
             ViewData["CollegeList"] = CollegeList;
-
-            _context.Entry(teacher).Collection(x => x.TeacherSubjects).Load();
-
-            return View(teacher);
         }
 
         // POST: Teachers/Edit/5
@@ -159,6 +166,7 @@ namespace CollegeWebsiteAdmin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            _AddEditCommon();
             return View(Data);
         }
 
@@ -251,6 +259,11 @@ namespace CollegeWebsiteAdmin.Controllers
 
             if (ModelState.IsValid)
             {
+                //gives list of subjects or records of teachersubjects table matching teacher id
+                IList<TeacherSubjects> TeacherSubject = _context.TeacherSubjects.Where(x => x.TeacherID == t1.Id).ToList();
+
+                _context.TeacherSubjects.RemoveRange(TeacherSubject);
+
                 foreach (var item in selSubject)
                 {
                     var rec = new TeacherSubjects()
@@ -261,6 +274,14 @@ namespace CollegeWebsiteAdmin.Controllers
 
                     t1.TeacherSubjects.Add(rec);
                 }
+
+
+                //Gets old list from db
+                IList<CollegeTeachers> CollegeTeachers = _context.CollegeTeachers
+                    .Where(x => x.TeacherId == t1.Id).ToList();
+
+                //removes those list from db
+                _context.CollegeTeachers.RemoveRange(CollegeTeachers);
 
                 foreach (var item in CollegeTeacherData)
                 {
@@ -278,6 +299,7 @@ namespace CollegeWebsiteAdmin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            _AddEditCommon();
             return View(t1);
         }
         //[HttpPost]
