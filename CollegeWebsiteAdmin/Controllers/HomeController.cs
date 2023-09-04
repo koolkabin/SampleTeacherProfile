@@ -38,7 +38,7 @@ namespace CollegeWebsiteAdmin.Controllers
         public IActionResult Login(string username, string password)
         {
             Teacher ValidUser = _context.Teachers
-                .Where(x => x.TeacherName == username && x.Telephone == password)
+                .Where(x => x.TeacherName == username && x.Password == password.EncryptSha256())
                 .FirstOrDefault();
 
             if (ValidUser != null)

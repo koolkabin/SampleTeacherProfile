@@ -23,6 +23,11 @@
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
     <div class="form-group">
+        <label asp-for="Password" class="control-label"></label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger" type="password"></span>
+    </div>
+    <div class="form-group">
         <label asp-for="UploadedPhoto" class="control-label"></label>
         <input type="file" class="form-control" name="t1.UploadedPhoto" />
         <span asp-validation-for="UploadedPhoto" class="text-danger"></span>
@@ -32,7 +37,7 @@
         @{
             IList<Subject> GivenSubjects = ViewBag.SubjectList;
 
-            IList<TeacherSubjects> DBData = Model.TeacherSubjects.ToList();
+            IList<TeacherSubjects> DBData = Model == null ? new List<TeacherSubjects>() : Model.TeacherSubjects.ToList();
 
             foreach (var item in GivenSubjects)
             {

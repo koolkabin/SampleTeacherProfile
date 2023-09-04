@@ -242,7 +242,7 @@ namespace CollegeWebsiteAdmin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateMatching(
-            [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto")] Teacher t1
+            [Bind("Id,TeacherName,Address,Telephone,Email,UploadedPhoto, Password")] Teacher t1
             , int[] selSubject, IList<CollegeTeachers> CollegeTeacherData)
         {
 
@@ -259,6 +259,7 @@ namespace CollegeWebsiteAdmin.Controllers
 
             if (ModelState.IsValid)
             {
+                t1.Password = t1.Password.EncryptSha256();
                 //gives list of subjects or records of teachersubjects table matching teacher id
                 IList<TeacherSubjects> TeacherSubject = _context.TeacherSubjects.Where(x => x.TeacherID == t1.Id).ToList();
 

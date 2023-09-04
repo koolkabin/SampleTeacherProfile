@@ -20,6 +20,7 @@ namespace CollegeWebsiteAdmin.Models
         public string ProfilePhotoName { get; set; }
         [NotMapped]
         public IFormFile UploadedPhoto { get; set; }
+        public string Password { get; set; }
 
         //navigation property from parent to child
         //in case of 1 to 1 relation: direct property only
