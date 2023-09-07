@@ -18,6 +18,8 @@ namespace CollegeWebsiteAdmin.Models
         public string Email { get; set; }
         [MaxLength(255)]
         public string ProfilePhotoName { get; set; }
+        public decimal Salary { get; set; }
+        public int SubjectId { get; set; }
         public string Password { get; set; }
 
         //navigation property from parent to child

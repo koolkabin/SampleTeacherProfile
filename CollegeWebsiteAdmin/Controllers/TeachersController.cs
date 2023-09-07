@@ -34,6 +34,63 @@ namespace CollegeWebsiteAdmin.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
+            IQueryable<Teacher> _Que = _context.Teachers;
+
+            int[] ids = new int[] { 5, 2, 3 };
+            IList<VMTeacherOutput> DataList1 = _Que
+                .Where(x => ids.Contains(x.Id))
+                .Select(x => new VMTeacherOutput()
+                {
+                    Id = x.Id,
+                    Title = x.TeacherName
+                })
+                .ToList();
+            int teacherCount = DataList1.Count(); //already loaded list data -> count
+            teacherCount = _Que.Count(); //makes database action qeuery and get count only from db
+
+            IDictionary<int, string> DataList = _context.Teachers //iqueryable of teachers
+                                                                  //.ToList()
+                .Where(x => x.TeacherName.Contains("ram"))
+                //.OrderBy(x => x.TeacherName)
+                .Select(x => new VMTeacherOutput()
+                {
+                    Id = x.Id,
+                    Title = x.TeacherName
+                })
+                .OrderBy(x => x.Title)
+                .Take(5)
+                .Skip(100)
+                //chaining
+                //.ToList();=
+                .ToDictionary(x => x.Id, x => x.Title);
+
+            decimal TotalSalary = _context.Teachers
+                .Where(x => x.Salary > 0)
+                .Sum(x => x.Salary);
+
+            IList<VMTeacherOutput2> DataList2 = _context.Teachers
+                .Select(x => new VMTeacherOutput2()
+                {
+                    Id = x.Id,
+                    Title = x.TeacherName,
+                    Salary = x.Salary,
+                    TotalSalary = TotalSalary
+                })
+                .ToList();
+
+            IList<VMTeacherOutput2> DataList3 = _context.Teachers
+                .GroupBy(x => x.SubjectId)
+                .Select(x => new VMTeacherOutput2()
+                {
+                    Id = x.FirstOrDefault().Id,
+                    Title = x.FirstOrDefault().TeacherName,
+                    Salary = x.FirstOrDefault().Salary,
+                    TotalSalary = x.Sum(x => x.Salary)
+                })
+                .ToList();
+
+
+
 
             return _context.Teachers != null ?
                         View(await _context.Teachers.ToListAsync()) :
